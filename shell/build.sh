@@ -70,14 +70,15 @@ mkdir -p ${buildDirectory}/lib
 cp lib/slf4j-api-1.7.7.jar lib/logback-classic-1.1.2.jar lib/logback-core-1.1.2.jar ${buildDirectory}/lib
 
 echo '* javadoc'
-javadoc -cp ${compileClasspath} -sourcepath ${sourceDirectory} -d ${buildDirectory}/apidocs -encoding ${sourceEncoding} -charset ${reportEncoding} -docencoding ${reportEncoding} -use -windowtitle 'greeter 1.0-SNAPSHOT API' -bottom 'Copyright &#169; 2014. All rights reserved.' be.crydust.greeter
+mkdir -p ${buildDirectory}/apidocs
+javadoc -cp ${compileClasspath} -sourcepath ${sourceDirectory} -d ${buildDirectory}/apidocs -encoding ${sourceEncoding} -charset ${reportEncoding} -docencoding ${reportEncoding} -use -windowtitle 'greeter 1.0-SNAPSHOT API' -bottom 'Copyright &#169; 2014. All rights reserved.' -link 'http://docs.oracle.com/javase/7/docs/api/' be.crydust.greeter
 
 echo '* package'
 # take the compiled code and package it in its distributable format
 echo 'Class-Path: lib/slf4j-api-1.7.7.jar lib/logback-classic-1.1.2.jar lib/logback-core-1.1.2.jar' > ${buildDirectory}/manifest
 jar cfme ${buildDirectory}/${finalName}.jar ${buildDirectory}/manifest ${entryPoint} -C ${outputDirectory} .
 jar cf ${buildDirectory}/${finalName}-sources.jar -C ${sourceDirectory} . -C ${resources} .
-jar cf ${buildDirectory}/${finalName}-javadoc.jar -C ${buildDirectory}/apidocs . -C ${resources} .
+jar cf ${buildDirectory}/${finalName}-javadoc.jar -C ${buildDirectory}/apidocs .
 
 cd ${buildDirectory}
 zip ${finalName}-distribution.zip *.jar lib/*
