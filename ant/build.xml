@@ -65,7 +65,7 @@
         </copy>
     </target>
 
-    <target name="test-compile" depends="process-test-resources">
+    <target name="test-compile" depends="compile, process-test-resources">
         <javac srcdir="${testSourceDirectory}" destdir="${testOutputDirectory}" includeantruntime="false" debug="true" deprecation="true" encoding="${sourceEncoding}" source="${source}" target="${target}">
             <classpath location="${outputDirectory}" />
             <classpath refid="testClasspath" />
@@ -116,7 +116,7 @@
         </javadoc>
     </target>
 
-    <target name="package" depends="compile, javadoc">
+    <target name="package" depends="compile, copy-dependencies, javadoc">
         <jar jarfile="${buildDirectory}/${finalName}.jar" basedir="${outputDirectory}">
             <manifest>
                 <attribute name="Main-Class" value="${entryPoint}" />
@@ -130,17 +130,37 @@
         <jar jarfile="${buildDirectory}/${finalName}-javadoc.jar" basedir="${buildDirectory}/apidocs" />
     </target>
 
-    <target name="distribution" depends="package, copy-dependencies">
+    <target name="distribution" depends="package">
         <zip destfile="${buildDirectory}/${finalName}-distribution.zip">
             <fileset dir="${buildDirectory}" includes="*.jar, lib/*" />
             <fileset dir="." includes="LICENSE.txt, NOTICE.txt, README.txt" />
         </zip>
     </target>
 
-    <target name="run" depends="package, copy-dependencies">
+    <target name="run" depends="compile">
+        <java fork="true" classname="${entryPoint}">
+            <classpath location="${outputDirectory}" />
+            <classpath refid="compileClasspath" />
+            <classpath refid="runtimeClasspath" />
+        </java>
+    </target>
+
+    <target name="run-package" depends="package">
         <java jar="${buildDirectory}/${finalName}.jar" fork="true" />
     </target>
 
-    <target name="all" depends="clean, compile, test, package, distribution, run"></target>
+    <target name="vizant">
+        <mkdir dir="lib" />
+        <get dest="lib" skipexisting="true" src="http://optimate.dl.sourceforge.net/project/vizant/Vizant%20Latest%20Jar/0.1.2/vizant-0.1.2.jar" />
+        <taskdef name="vizant"
+                 classname="net.sourceforge.vizant.Vizant"
+                 classpath="lib/vizant-0.1.2.jar" />
+        <vizant antfile="build.xml" outfile="build.dot" uniqueref="true" />
+        <exec executable="dot" >
+            <arg line="-Tpng build.dot -o build.png"/>
+        </exec>
+    </target>
+
+    <target name="all" depends="clean, test, distribution, run-package"></target>
 
 </project>
