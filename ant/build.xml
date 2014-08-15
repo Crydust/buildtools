@@ -52,7 +52,7 @@
         </copy>
     </target>
 
-    <target name="compile">
+    <target name="compile" depends="download-dependencies, process-resources">
         <javac srcdir="${sourceDirectory}" destdir="${outputDirectory}" includeantruntime="false" debug="true" deprecation="true" encoding="${sourceEncoding}" source="${source}" target="${target}">
             <classpath refid="compileClasspath" />
         </javac>
@@ -65,7 +65,7 @@
         </copy>
     </target>
 
-    <target name="test-compile">
+    <target name="test-compile" depends="process-test-resources">
         <javac srcdir="${testSourceDirectory}" destdir="${testOutputDirectory}" includeantruntime="false" debug="true" deprecation="true" encoding="${sourceEncoding}" source="${source}" target="${target}">
             <classpath location="${outputDirectory}" />
             <classpath refid="testClasspath" />
@@ -73,7 +73,7 @@
         </javac>
     </target>
 
-    <target name="test">
+    <target name="test" depends="test-compile">
         <mkdir dir="${buildDirectory}/surefire-reports" />
         <junit printsummary="withOutAndErr" haltonfailure="true">
             <formatter type="xml" />
@@ -90,7 +90,7 @@
         </junit>
     </target>
 
-    <target name="copy-dependencies">
+    <target name="copy-dependencies" depends="download-dependencies">
         <mkdir dir="${buildDirectory}/lib" />
         <copy todir="${buildDirectory}/lib" flatten="true">
             <path refid="compileClasspath" />
@@ -98,7 +98,7 @@
         </copy>
     </target>
 
-    <target name="javadoc">
+    <target name="javadoc" depends="download-dependencies">
         <mkdir dir="${buildDirectory}/apidocs" />
         <javadoc
             destdir="${buildDirectory}/apidocs"
@@ -116,7 +116,7 @@
         </javadoc>
     </target>
 
-    <target name="package">
+    <target name="package" depends="compile, javadoc">
         <jar jarfile="${buildDirectory}/${finalName}.jar" basedir="${outputDirectory}">
             <manifest>
                 <attribute name="Main-Class" value="${entryPoint}" />
@@ -130,17 +130,17 @@
         <jar jarfile="${buildDirectory}/${finalName}-javadoc.jar" basedir="${buildDirectory}/apidocs" />
     </target>
 
-    <target name="distribution">
+    <target name="distribution" depends="package, copy-dependencies">
         <zip destfile="${buildDirectory}/${finalName}-distribution.zip">
             <fileset dir="${buildDirectory}" includes="*.jar, lib/*" />
             <fileset dir="." includes="LICENSE.txt, NOTICE.txt, README.txt" />
         </zip>
     </target>
 
-    <target name="run">
+    <target name="run" depends="package, copy-dependencies">
         <java jar="${buildDirectory}/${finalName}.jar" fork="true" />
     </target>
 
-    <target name="all" depends="clean, download-dependencies, process-resources, compile, process-test-resources, test-compile, test, copy-dependencies, javadoc, package, distribution, run"></target>
+    <target name="all" depends="clean, compile, test, package, distribution, run"></target>
 
 </project>
