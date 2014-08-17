@@ -19,7 +19,7 @@
     <property name="target" value="1.8" />
 
     <path id="compileClasspath">
-        <pathelement location="lib/slf4j-api-1.7.7.jar" />
+        <pathelement location="lib/slf4j-api-1.7.6.jar" />
     </path>
 
     <path id="runtimeClasspath">
@@ -38,7 +38,7 @@
 
     <target name="download-dependencies">
         <mkdir dir="lib" />
-        <get dest="lib" skipexisting="true" src="http://central.maven.org/maven2/org/slf4j/slf4j-api/1.7.7/slf4j-api-1.7.7.jar" />
+        <get dest="lib" skipexisting="true" src="http://central.maven.org/maven2/org/slf4j/slf4j-api/1.7.6/slf4j-api-1.7.6.jar" />
         <get dest="lib" skipexisting="true" src="http://central.maven.org/maven2/ch/qos/logback/logback-classic/1.1.2/logback-classic-1.1.2.jar" />
         <get dest="lib" skipexisting="true" src="http://central.maven.org/maven2/ch/qos/logback/logback-core/1.1.2/logback-core-1.1.2.jar" />
         <get dest="lib" skipexisting="true" src="http://central.maven.org/maven2/junit/junit/4.11/junit-4.11.jar" />
@@ -120,7 +120,7 @@
         <jar jarfile="${buildDirectory}/${finalName}.jar" basedir="${outputDirectory}">
             <manifest>
                 <attribute name="Main-Class" value="${entryPoint}" />
-                <attribute name="Class-Path" value="lib/slf4j-api-1.7.7.jar lib/logback-classic-1.1.2.jar lib/logback-core-1.1.2.jar" />
+                <attribute name="Class-Path" value="lib/slf4j-api-1.7.6.jar lib/logback-classic-1.1.2.jar lib/logback-core-1.1.2.jar" />
             </manifest>
         </jar>
         <jar jarfile="${buildDirectory}/${finalName}-sources.jar">

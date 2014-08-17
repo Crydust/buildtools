@@ -21,7 +21,7 @@ reportEncoding=UTF-8
 source=1.8
 target=1.8
 
-compileClasspath=lib/slf4j-api-1.7.7.jar
+compileClasspath=lib/slf4j-api-1.7.6.jar
 runtimeClasspath=lib/logback-classic-1.1.2.jar:lib/logback-core-1.1.2.jar
 testClasspath=lib/junit-4.11.jar:lib/hamcrest-core-1.3.jar
 
@@ -33,7 +33,7 @@ echo '* download dependencies'
 # download files if not present and keep them outside the target directory for caching
 mkdir -p lib
 cd lib
-[ ! -f slf4j-api-1.7.7.jar ]       && curl -O http://central.maven.org/maven2/org/slf4j/slf4j-api/1.7.7/slf4j-api-1.7.7.jar
+[ ! -f slf4j-api-1.7.6.jar ]       && curl -O http://central.maven.org/maven2/org/slf4j/slf4j-api/1.7.6/slf4j-api-1.7.6.jar
 [ ! -f logback-classic-1.1.2.jar ] && curl -O http://central.maven.org/maven2/ch/qos/logback/logback-classic/1.1.2/logback-classic-1.1.2.jar
 [ ! -f logback-core-1.1.2.jar ]    && curl -O http://central.maven.org/maven2/ch/qos/logback/logback-core/1.1.2/logback-core-1.1.2.jar
 [ ! -f junit-4.11.jar ]            && curl -O http://central.maven.org/maven2/junit/junit/4.11/junit-4.11.jar
@@ -67,7 +67,7 @@ echo '* prepare-package'
 
 echo '* copy-dependencies'
 mkdir -p ${buildDirectory}/lib
-cp lib/slf4j-api-1.7.7.jar lib/logback-classic-1.1.2.jar lib/logback-core-1.1.2.jar ${buildDirectory}/lib
+cp lib/slf4j-api-1.7.6.jar lib/logback-classic-1.1.2.jar lib/logback-core-1.1.2.jar ${buildDirectory}/lib
 
 echo '* javadoc'
 mkdir -p ${buildDirectory}/apidocs
@@ -75,7 +75,7 @@ javadoc -cp ${compileClasspath} -sourcepath ${sourceDirectory} -d ${buildDirecto
 
 echo '* package'
 # take the compiled code and package it in its distributable format
-echo 'Class-Path: lib/slf4j-api-1.7.7.jar lib/logback-classic-1.1.2.jar lib/logback-core-1.1.2.jar' > ${buildDirectory}/manifest
+echo 'Class-Path: lib/slf4j-api-1.7.6.jar lib/logback-classic-1.1.2.jar lib/logback-core-1.1.2.jar' > ${buildDirectory}/manifest
 jar cfme ${buildDirectory}/${finalName}.jar ${buildDirectory}/manifest ${entryPoint} -C ${outputDirectory} .
 jar cf ${buildDirectory}/${finalName}-sources.jar -C ${sourceDirectory} . -C ${resources} .
 jar cf ${buildDirectory}/${finalName}-javadoc.jar -C ${buildDirectory}/apidocs .
