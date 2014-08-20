@@ -33,11 +33,11 @@ echo '* download dependencies'
 # download files if not present and keep them outside the target directory for caching
 mkdir -p lib
 cd lib
-[ ! -f slf4j-api-1.7.6.jar ]       && curl -O http://central.maven.org/maven2/org/slf4j/slf4j-api/1.7.6/slf4j-api-1.7.6.jar
-[ ! -f logback-classic-1.1.2.jar ] && curl -O http://central.maven.org/maven2/ch/qos/logback/logback-classic/1.1.2/logback-classic-1.1.2.jar
-[ ! -f logback-core-1.1.2.jar ]    && curl -O http://central.maven.org/maven2/ch/qos/logback/logback-core/1.1.2/logback-core-1.1.2.jar
-[ ! -f junit-4.11.jar ]            && curl -O http://central.maven.org/maven2/junit/junit/4.11/junit-4.11.jar
-[ ! -f hamcrest-core-1.3.jar ]     && curl -O http://central.maven.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar
+[ ! -f slf4j-api-1.7.6.jar ]       && curl -O https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/1.7.6/slf4j-api-1.7.6.jar
+[ ! -f logback-classic-1.1.2.jar ] && curl -O https://repo.maven.apache.org/maven2/ch/qos/logback/logback-classic/1.1.2/logback-classic-1.1.2.jar
+[ ! -f logback-core-1.1.2.jar ]    && curl -O https://repo.maven.apache.org/maven2/ch/qos/logback/logback-core/1.1.2/logback-core-1.1.2.jar
+[ ! -f junit-4.11.jar ]            && curl -O https://repo.maven.apache.org/maven2/junit/junit/4.11/junit-4.11.jar
+[ ! -f hamcrest-core-1.3.jar ]     && curl -O https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar
 cd ..
 
 echo '* process-resources'

@@ -38,11 +38,11 @@
 
     <target name="download-dependencies">
         <mkdir dir="lib" />
-        <get dest="lib" skipexisting="true" src="http://central.maven.org/maven2/org/slf4j/slf4j-api/1.7.6/slf4j-api-1.7.6.jar" />
-        <get dest="lib" skipexisting="true" src="http://central.maven.org/maven2/ch/qos/logback/logback-classic/1.1.2/logback-classic-1.1.2.jar" />
-        <get dest="lib" skipexisting="true" src="http://central.maven.org/maven2/ch/qos/logback/logback-core/1.1.2/logback-core-1.1.2.jar" />
-        <get dest="lib" skipexisting="true" src="http://central.maven.org/maven2/junit/junit/4.11/junit-4.11.jar" />
-        <get dest="lib" skipexisting="true" src="http://central.maven.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar" />
+        <get dest="lib" skipexisting="true" src="https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/1.7.6/slf4j-api-1.7.6.jar" />
+        <get dest="lib" skipexisting="true" src="https://repo.maven.apache.org/maven2/ch/qos/logback/logback-classic/1.1.2/logback-classic-1.1.2.jar" />
+        <get dest="lib" skipexisting="true" src="https://repo.maven.apache.org/maven2/ch/qos/logback/logback-core/1.1.2/logback-core-1.1.2.jar" />
+        <get dest="lib" skipexisting="true" src="https://repo.maven.apache.org/maven2/junit/junit/4.11/junit-4.11.jar" />
+        <get dest="lib" skipexisting="true" src="https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar" />
     </target>
 
     <target name="process-resources">
