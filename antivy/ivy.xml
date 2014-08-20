@@ -1,0 +1,15 @@
+<ivy-module version="2.0">
+    <info organisation="be.crydust.greeter" module="greeter"/>
+    <configurations>
+        <conf name="compile" />
+        <conf name="runtime" />
+        <conf name="test" />
+    </configurations>
+    <dependencies>
+        <dependency org="org.slf4j" name="slf4j-api" rev="1.7.6" conf="compile->default" />
+        <dependency org="ch.qos.logback" name="logback-classic" rev="1.1.2" conf="runtime->default" />
+        <!-- <dependency org="ch.qos.logback" name="logback-core" rev="1.1.2" conf="runtime->default" /> -->
+        <dependency org="junit" name="junit" rev="4.11" conf="test->default" />
+        <!-- <dependency org="org.hamcrest" name="hamcrest-core" rev="1.3" conf="test->default" /> -->
+    </dependencies>
+</ivy-module>

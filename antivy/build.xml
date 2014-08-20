@@ -1,0 +1,152 @@
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="greeter" default="all" basedir=".">
+
+    <property name="artifactId" value="greeter" />
+    <property name="version" value="1.0-SNAPSHOT" />
+    <property name="entryPoint" value="be.crydust.greeter.App" />
+
+    <property name="buildDirectory" location="target" />
+    <property name="outputDirectory" location="target/classes" />
+    <property name="finalName" value="${artifactId}-${version}" />
+    <property name="testOutputDirectory" location="target/test-classes" />
+    <property name="sourceDirectory" location="src/main/java" />
+    <property name="testSourceDirectory" location="src/test/java" />
+    <property name="resources" location="src/main/resources" />
+    <property name="testResources" location="src/test/resources" />
+
+    <property name="sourceEncoding" value="UTF-8" />
+    <property name="reportEncoding" value="UTF-8" />
+    <property name="source" value="1.8" />
+    <property name="target" value="1.8" />
+
+    <target name="clean">
+        <delete dir="${buildDirectory}" />
+    </target>
+
+    <target name="download-dependencies">
+        <ivy:resolve />
+        <ivy:cachepath pathid="compileClasspath" conf="compile" />
+        <ivy:cachepath pathid="runtimeClasspath" conf="runtime" />
+        <ivy:cachepath pathid="testClasspath" conf="test" />
+    </target>
+
+    <target name="process-resources">
+        <mkdir dir="${outputDirectory}" />
+        <copy todir="${outputDirectory}">
+            <fileset dir="${resources}" />
+        </copy>
+    </target>
+
+    <target name="compile" depends="download-dependencies, process-resources">
+        <javac srcdir="${sourceDirectory}" destdir="${outputDirectory}" includeantruntime="false" debug="true" deprecation="true" encoding="${sourceEncoding}" source="${source}" target="${target}">
+            <classpath refid="compileClasspath" />
+        </javac>
+    </target>
+
+    <target name="process-test-resources">
+        <mkdir dir="${testOutputDirectory}" />
+        <copy todir="${testOutputDirectory}">
+            <fileset dir="${testResources}" />
+        </copy>
+    </target>
+
+    <target name="test-compile" depends="compile, process-test-resources">
+        <javac srcdir="${testSourceDirectory}" destdir="${testOutputDirectory}" includeantruntime="false" debug="true" deprecation="true" encoding="${sourceEncoding}" source="${source}" target="${target}">
+            <classpath location="${outputDirectory}" />
+            <classpath refid="testClasspath" />
+            <classpath refid="compileClasspath" />
+        </javac>
+    </target>
+
+    <target name="test" depends="test-compile">
+        <mkdir dir="${buildDirectory}/surefire-reports" />
+        <junit printsummary="withOutAndErr" haltonfailure="true">
+            <formatter type="xml" />
+            <classpath location="${testOutputDirectory}" />
+            <classpath location="${outputDirectory}" />
+            <classpath refid="testClasspath" />
+            <classpath refid="compileClasspath" />
+            <classpath refid="runtimeClasspath" />
+            <batchtest todir="${buildDirectory}/surefire-reports">
+                <fileset dir="${testOutputDirectory}">
+                    <include name="**/*Test.class" />
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <target name="copy-dependencies" depends="download-dependencies">
+        <mkdir dir="${buildDirectory}/lib" />
+        <ivy:retrieve pattern="${buildDirectory}/lib/[artifact]-[revision].[ext]" conf="compile,runtime" />
+    </target>
+
+    <target name="javadoc" depends="download-dependencies">
+        <mkdir dir="${buildDirectory}/apidocs" />
+        <javadoc
+            destdir="${buildDirectory}/apidocs"
+            encoding="${sourceEncoding}"
+            charset="${reportEncoding}"
+            docencoding="${reportEncoding}"
+            use="true"
+            windowtitle="greeter 1.0-SNAPSHOT API">
+            <classpath refid="compileClasspath" />
+            <packageset dir="${sourceDirectory}" defaultexcludes="yes">
+                <include name="**" />
+            </packageset>
+            <bottom><![CDATA[Copyright &#169; 2014. All rights reserved.]]></bottom>
+            <link href="http://docs.oracle.com/javase/7/docs/api/" />
+        </javadoc>
+    </target>
+
+    <target name="package" depends="compile, copy-dependencies, javadoc">
+        <manifestclasspath property="jarClasspath" jarfile="${buildDirectory}/${finalName}.jar">
+            <classpath>
+                <fileset dir="${buildDirectory}" includes="lib/*.jar"/>
+            </classpath>
+        </manifestclasspath>
+        <jar jarfile="${buildDirectory}/${finalName}.jar" basedir="${outputDirectory}">
+            <manifest>
+                <attribute name="Main-Class" value="${entryPoint}" />
+                <attribute name="Class-Path" value="${jarClasspath}" />
+            </manifest>
+        </jar>
+        <jar jarfile="${buildDirectory}/${finalName}-sources.jar">
+            <fileset dir="${sourceDirectory}" />
+            <fileset dir="${resources}" />
+        </jar>
+        <jar jarfile="${buildDirectory}/${finalName}-javadoc.jar" basedir="${buildDirectory}/apidocs" />
+    </target>
+
+    <target name="distribution" depends="package">
+        <zip destfile="${buildDirectory}/${finalName}-distribution.zip">
+            <fileset dir="${buildDirectory}" includes="*.jar, lib/*" />
+            <fileset dir="." includes="LICENSE.txt, NOTICE.txt, README.txt" />
+        </zip>
+    </target>
+
+    <target name="run" depends="compile">
+        <java fork="true" classname="${entryPoint}">
+            <classpath location="${outputDirectory}" />
+            <classpath refid="compileClasspath" />
+            <classpath refid="runtimeClasspath" />
+        </java>
+    </target>
+
+    <target name="run-package" depends="package">
+        <java jar="${buildDirectory}/${finalName}.jar" fork="true" />
+    </target>
+
+    <target name="vizant">
+        <mkdir dir="lib" />
+        <get dest="lib" skipexisting="true" src="http://optimate.dl.sourceforge.net/project/vizant/Vizant%20Latest%20Jar/0.1.2/vizant-0.1.2.jar" />
+        <taskdef name="vizant"
+            classname="net.sourceforge.vizant.Vizant"
+            classpath="lib/vizant-0.1.2.jar" />
+        <vizant antfile="build.xml" outfile="build.dot" uniqueref="true" />
+        <exec executable="dot" >
+            <arg line="-Tpng build.dot -o build.png"/>
+        </exec>
+    </target>
+
+    <target name="all" depends="clean, test, distribution, run-package"></target>
+
+</project>
