@@ -59,7 +59,8 @@
 
     <target name="test" depends="test-compile">
         <mkdir dir="${buildDirectory}/surefire-reports" />
-        <junit printsummary="withOutAndErr" haltonfailure="true">
+        <junit haltonfailure="true" showoutput="true">
+            <formatter usefile="false" type="brief"/>
             <formatter type="xml" />
             <classpath location="${testOutputDirectory}" />
             <classpath location="${outputDirectory}" />
