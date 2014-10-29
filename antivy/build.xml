@@ -25,8 +25,8 @@
     <target name="download-dependencies">
         <ivy:resolve />
         <ivy:cachepath pathid="compileClasspath" conf="compile" />
-        <ivy:cachepath pathid="runtimeClasspath" conf="runtime" />
-        <ivy:cachepath pathid="testClasspath" conf="test" />
+        <ivy:cachepath pathid="runtimeClasspath" conf="compile,runtime" />
+        <ivy:cachepath pathid="testClasspath" conf="compile,runtime,test" />
     </target>
 
     <target name="process-resources">
@@ -53,7 +53,6 @@
         <javac srcdir="${testSourceDirectory}" destdir="${testOutputDirectory}" includeantruntime="false" debug="true" deprecation="true" encoding="${sourceEncoding}" source="${source}" target="${target}">
             <classpath location="${outputDirectory}" />
             <classpath refid="testClasspath" />
-            <classpath refid="compileClasspath" />
         </javac>
     </target>
 
@@ -65,8 +64,6 @@
             <classpath location="${testOutputDirectory}" />
             <classpath location="${outputDirectory}" />
             <classpath refid="testClasspath" />
-            <classpath refid="compileClasspath" />
-            <classpath refid="runtimeClasspath" />
             <batchtest todir="${buildDirectory}/surefire-reports">
                 <fileset dir="${testOutputDirectory}">
                     <include name="**/*Test.class" />
@@ -127,7 +124,6 @@
     <target name="run" depends="compile">
         <java fork="true" classname="${entryPoint}">
             <classpath location="${outputDirectory}" />
-            <classpath refid="compileClasspath" />
             <classpath refid="runtimeClasspath" />
         </java>
     </target>
