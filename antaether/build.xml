@@ -24,8 +24,8 @@
 
     <target name="download-dependencies">
         <mkdir dir="aether" />
-        <get dest="aether" skipexisting="true" src="https://repo.maven.apache.org/maven2/org/eclipse/aether/aether-ant-tasks/1.0.0.v20140518/aether-ant-tasks-1.0.0.v20140518-uber.jar" />
-        <path id="aether-ant-tasks.classpath" path="aether/aether-ant-tasks-1.0.0.v20140518-uber.jar" />
+        <get dest="aether" skipexisting="true" src="https://repo.maven.apache.org/maven2/org/eclipse/aether/aether-ant-tasks/1.0.1.v20141111/aether-ant-tasks-1.0.1.v20141111-uber.jar" />
+        <path id="aether-ant-tasks.classpath" path="aether/aether-ant-tasks-1.0.1.v20141111-uber.jar" />
         <typedef resource="org/eclipse/aether/ant/antlib.xml"
                  uri="antlib:org.eclipse.aether.ant"
                  classpathref="aether-ant-tasks.classpath" />
